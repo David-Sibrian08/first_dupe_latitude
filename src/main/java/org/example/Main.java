@@ -1,12 +1,17 @@
 package org.example;
 
-import java.util.HashSet;
+import java.util.HashMap;
 
 public class Main {
     public static void main(String[] args) {
-        int[] input = parseInput(args);
-        int dupe = findFirstDuplicate(input);
-        System.out.println(dupe);
+        String[] input = args;
+        Object[] result = findFirstDuplicateWithIndex(input);
+
+        if (result == null) {
+            System.out.println("Found duplicate value " + result[0] + " at index " + result[1]);
+        } else {
+            System.out.println("No duplicates found");
+        }
     }
 
     private static int[] parseInput(String[] args) {
@@ -17,26 +22,22 @@ public class Main {
         return elements;
     }
 
-    public static int findFirstDuplicate(int[] numbers) {
-        int count = numbers.length;
+    public static <T>  Object[] findFirstDuplicateWithIndex(T[] input) {
 
-        if (numbers == null) {
-            return -1;
+        if (input == null || input.length == 0) {
+            return null;
         }
 
-        if (count == 0) {
-            return -1;
-        }
+        HashMap<T, Integer> map = new HashMap<>();
 
-        HashSet<Integer> seen = new HashSet<>();
-
-        for (int x= 0; x < count; x++) {
-            if(seen.contains(numbers[x])) {
-                return numbers[x];
+        for (int x= 0; x < input.length; x++) {
+            T current = input[x];
+            if (map.containsKey(current)) {
+                return new Object[]{current, map.get(current)};
             } else {
-                seen.add(numbers[x]);
+                map.put(current, x);
             }
         }
-        return -1;
+        return new Object[]{-1, -1};
     }
 }
